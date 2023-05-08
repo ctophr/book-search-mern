@@ -4,18 +4,8 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
-    users: async () => {
-      return User.find().populate('books');
-    },
-    user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('books');
-    },
-    books: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Book.find(params).sort({ createdAt: -1 });
-    },
-    book: async (parent, { bookId }) => {
-      return Book.findOne({ _id: bookId });
+    me: async () => {
+      return User.find().populate('saveBooks');
     },
   },
 
@@ -51,37 +41,30 @@ const resolvers = {
       // Return an `Auth` object that consists of the signed token and user's information
       return { token, user };
     },
-    addBook: async (parent, { bookText, bookAuthor }) => {
-      const book = await Book.create({ bookText, bookAuthor });
+    saveBook: async (
+      parent,
+      { bookID, authors, description, title, image, link }
+    ) => {
+      const book = await Book.create({
+        bookID,
+        authors,
+        description,
+        title,
+        image,
+        link,
+      });
 
-      await User.findOneAndUpdate(
-        { username: bookAuthor },
-        { $addToSet: { books: book._id } }
-      );
+      // how to set username to logged in user?
+      //   await User.findOneAndUpdate(
+      //     { username: bookAuthor },
+      //     { $addToSet: { books: book._id } }
+      //   );
 
       return book;
     },
-    addComment: async (parent, { bookId, commentText, commentAuthor }) => {
-      return Book.findOneAndUpdate(
-        { _id: bookId },
-        {
-          $addToSet: { comments: { commentText, commentAuthor } },
-        },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
-    },
+
     removeBook: async (parent, { bookId }) => {
       return Book.findOneAndDelete({ _id: bookId });
-    },
-    removeComment: async (parent, { bookId, commentId }) => {
-      return Book.findOneAndUpdate(
-        { _id: bookId },
-        { $pull: { comments: { _id: commentId } } },
-        { new: true }
-      );
     },
   },
 };
