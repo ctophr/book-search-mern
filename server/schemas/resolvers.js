@@ -4,8 +4,11 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
-    me: async () => {
-      return User.find().populate('saveBooks');
+    me: async (parent, args, context) => {
+      if (context.user) {
+        return User.findOne({ _id: context.user._id }).populate('savedBooks');
+      }
+      throw new AuthenticationError('You need to log in.');
     },
   },
 
@@ -41,30 +44,38 @@ const resolvers = {
       // Return an `Auth` object that consists of the signed token and user's information
       return { token, user };
     },
-    saveBook: async (
-      parent,
-      { bookID, authors, description, title, image, link }
-    ) => {
-      const book = await Book.create({
-        bookID,
-        authors,
-        description,
-        title,
-        image,
-        link,
-      });
-
-      // how to set username to logged in user?
-      //   await User.findOneAndUpdate(
-      //     { username: bookAuthor },
-      //     { $addToSet: { books: book._id } }
-      //   );
-
-      return book;
+    saveBook: async (parent, { book }, context) => {
+      console.log(book);
+      console.log('user_id', context.user._id);
+      if (context.user) {
+        return await User.findOneAndUpdate(
+          { _id: context.user._id },
+          {
+            $addToSet: {
+              savedBooks: {
+                bookId: book.bookId,
+                authors: book.authors,
+                description: book.description,
+                image: book.image,
+                link: book.link,
+                title: book.title,
+              },
+            },
+          },
+          { new: true }
+        );
+      }
+      throw new AuthenticationError('You need to log in.');
     },
 
-    removeBook: async (parent, { bookId }) => {
-      return Book.findOneAndDelete({ _id: bookId });
+    removeBook: async (parent, { bookId }, context) => {
+      if (context.user) {
+        return User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId } } }
+        );
+      }
+      throw new AuthenticationError('You need to log in.');
     },
   },
 };
