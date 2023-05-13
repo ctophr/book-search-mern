@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { createUser } from '../utils/API';
+// import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 // import code to implement graphQL
@@ -38,17 +38,11 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await createUser({
-        variables: { userFormData },
+      // create new user in DB and
+      //receive token and user back from the mutation
+      const { token, user } = await createUser({
+        variables: { ...userFormData },
       });
-      console.log('...userFormData = ', userFormData);
-      console.log('response = ', response);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token, user } = await response.json();
       console.log(user);
       Auth.login(token);
     } catch (err) {
