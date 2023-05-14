@@ -28,6 +28,11 @@ export const SAVE_BOOK = gql`
   mutation saveBook($book: SaveBookInput) {
     saveBook(book: $book) {
       _id
+      username
+      savedbooks {
+        title
+        bookId
+      }
     }
   }
 `;
