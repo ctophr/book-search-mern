@@ -25,8 +25,9 @@ const SavedBooks = () => {
     }
 
     try {
+      console.log('bookId = ', bookId);
       const { data } = await deleteBook({
-        variables: bookId,
+        variables: { bookId },
       });
 
       console.log('data = ', data);
