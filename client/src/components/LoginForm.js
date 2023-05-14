@@ -15,12 +15,7 @@ const LoginForm = () => {
   const [showAlert, setShowAlert] = useState(false);
 
   //call useMutation hook for LOGIN_USER mutation
-  const [loginUser] = useMutation(LOGIN_USER, {
-    onCompleted: (data) => {
-      //delete console.log
-      console.log('data = ', data);
-    },
-  });
+  const [loginUser] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -38,11 +33,16 @@ const LoginForm = () => {
     }
 
     try {
-      const { token, user } = await loginUser({
-        variables: userFormData, // seems to work with userFormData or {...userFormData}
+      // const { token, user } = await loginUser({
+      //   variables: userFormData, // seems to work with userFormData or {...userFormData}
+      // });
+      // console.log(user);
+      // Auth.login(token);
+      const { data } = await loginUser({
+        variables: { ...userFormData }, // seems to work with userFormData or {...userFormData}
       });
-      console.log(user);
-      Auth.login(token);
+      console.log(data);
+      Auth.login(data.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
