@@ -42,7 +42,9 @@ const LoginForm = () => {
         variables: { ...userFormData }, // seems to work with userFormData or {...userFormData}
       });
       console.log(data);
-      Auth.login(data.token);
+      console.log('data.token = ', data.token);
+      console.log('data.login.token = ', data.login.token);
+      Auth.login(data.login.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);

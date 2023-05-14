@@ -40,11 +40,18 @@ const SignupForm = () => {
     try {
       // create new user in DB and
       //receive token and user back from the mutation
-      const { token, user } = await createUser({
+
+      // const { token, user } = await createUser({
+      //   variables: { ...userFormData },
+      // });
+      // console.log(user);
+      // Auth.login(token);
+
+      const { data } = await createUser({
         variables: { ...userFormData },
       });
-      console.log(user);
-      Auth.login(token);
+      console.log(data);
+      Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
