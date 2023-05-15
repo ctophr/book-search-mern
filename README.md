@@ -6,7 +6,7 @@ This app searches Google's Book API, allowing users to save individual books to 
 
 The process was not very straightforward as there are many interconnected pieces when it comes to querying or mutating the database, with multiple pieces interacting on the front and back end.
 
-I also learned more about deploying to Heroku, specifically making a connecting to Mongo Atlas and downgrading my node in my package.json using "engines".
+I also learned more about deploying to Heroku, specifically making a connecting to Mongo Atlas (we've only used Compass in class) and downgrading my node in my package.json using "engines".
 
 ## Installation
 
