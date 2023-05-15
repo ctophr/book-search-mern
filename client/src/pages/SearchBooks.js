@@ -71,9 +71,14 @@ const SearchBooks = () => {
       return false;
     }
     console.log('bookToSave = ', bookToSave);
+
+    // create an object with property "book" to match what the mutation is expecting
+    const bookObj = { book: { ...bookToSave } };
+
+    console.log('bookObj = ', bookObj);
     try {
       const { data } = await saveBook({
-        variables: { ...bookToSave },
+        variables: bookObj,
       });
       console.log('data = ', data);
 
