@@ -42,7 +42,7 @@ const SignupForm = () => {
       //receive token and user back from the mutation
 
       const { data } = await createUser({
-        variables: { ...userFormData },
+        variables: userFormData,
       });
       console.log(data);
       Auth.login(data.addUser.token);
