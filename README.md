@@ -14,7 +14,7 @@ To run this code locally, run "npm i" and "npm run develop" in your CLI.
 
 ## Usage
 
-This app is deployed at ![https://fast-savannah-86254.herokuapp.com/
+This app is deployed at [https://fast-savannah-86254.herokuapp.com/
 ](https://fast-savannah-86254.herokuapp.com/).
 
 Users can search books without logging in, but to save them, one needs to create an account. User can delete books they saved from their profile page.
